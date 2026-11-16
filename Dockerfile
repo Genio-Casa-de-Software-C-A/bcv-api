@@ -2,7 +2,9 @@ FROM denoland/deno:latest
 
 WORKDIR /app
 
-# Prefer not to run as root; ensure /app is owned by deno user
+# Ensure /app is owned by deno user
+RUN chown -R deno:deno /app
+
 COPY --chown=deno:deno deno.json deno.lock ./
 COPY --chown=deno:deno main.ts ./
 
