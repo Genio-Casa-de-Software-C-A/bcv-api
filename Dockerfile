@@ -2,15 +2,14 @@ FROM denoland/deno:latest
 
 WORKDIR /app
 
-# Prefer not to run as root
+# Prefer not to run as root; ensure /app is owned by deno user
+COPY --chown=deno:deno deno.json deno.lock ./
+COPY --chown=deno:deno main.ts ./
+
 USER deno
 
 # Cache dependencies
-COPY deno.json deno.lock ./
-RUN deno install
-
-# Copy application source
-COPY main.ts ./
+RUN deno cache main.ts
 
 # Expose default port
 EXPOSE 3000
